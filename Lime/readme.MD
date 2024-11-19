@@ -32,6 +32,8 @@ To get started with the bot, follow these steps:
 
 ```json
 {
+  "isSkipInvalidProxy": false,
+  "delayEachAccount": [5, 8],
   "howManyPowerUpgrade": 5,
   "howManyEnergyUpgrade": 5,
   "howManyRechargeUPgrade": 5,
