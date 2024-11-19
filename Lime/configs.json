@@ -4,5 +4,7 @@
   "country_time": "en-US",
   "howManyPowerUpgrade": 5,
   "howManyEnergyUpgrade": 5,
-  "howManyRechargeUPgrade": 5
+  "howManyRechargeUPgrade": 5,
+  "isSkipInvalidProxy": false,
+  "delayEachAccount": [5, 8]
 }
