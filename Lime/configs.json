@@ -6,5 +6,6 @@
   "howManyEnergyUpgrade": 5,
   "howManyRechargeUPgrade": 5,
   "isSkipInvalidProxy": false,
-  "delayEachAccount": [5, 8]
+  "delayEachAccount": [18, 188],
+  "doTasks": true
 }
