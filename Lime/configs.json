@@ -1,7 +1,6 @@
 {
   "limit": 100,
   "countdown": 300,
-  "country_time": "en-US",
   "howManyPowerUpgrade": 5,
   "howManyEnergyUpgrade": 5,
   "howManyRechargeUPgrade": 5,
