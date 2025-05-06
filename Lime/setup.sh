@@ -1,117 +1,34 @@
-#!/bin/bash
+@echo off
+title Lime Bot by @MeoMunDep
+color 0A
 
-chmod +x "$0"
+cd %~dp0
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' 
+echo Checking configuration files...
 
-echo -ne "\033]0;Lime Bot by @MeoMunDep\007"
+(for %%F in (datas.txt proxies.txt) do (
+    if not exist %%F (
+        type nul > %%F
+        echo Created %%F
+    )
+))
 
+echo Configuration files checked.
 
-print_green() {
-    echo -e "${GREEN}$1${NC}"
-}
+echo Checking dependencies...
+if exist "..\node_modules" (
+    echo Using node_modules from parent directory...
+    cd ..
+    CALL npm install --no-audit --no-fund --prefer-offline --force  user-agents axios colors https-proxy-agent socks-proxy-agent 
+    cd %~dp0
+) else (
+    echo Installing dependencies in current directory...
+    CALL npm install --no-audit --no-fund --prefer-offline --force  user-agents axios colors https-proxy-agent socks-proxy-agent  
+)
+echo Dependencies installation completed!
 
-print_yellow() {
-    echo -e "${YELLOW}$1${NC}"
-}
-
-print_red() {
-    echo -e "${RED}$1${NC}"
-}
-
-chmod +x "$0"
-
-if [ -d "../node_modules" ]; then
-    print_green "Found node_modules in parent directory"
-    MODULES_DIR=".."
-else
-    print_green "Using current directory for node_modules"
-    MODULES_DIR="."
-fi
-
-check_node() {
-    if ! command -v node &> /dev/null; then
-        print_red "Node.js not found, installing..."
-        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-            sudo apt update && sudo apt install -y nodejs npm
-        elif [[ "$OSTYPE" == "darwin"* ]]; then
-            brew install node
-        elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" ]]; then
-            echo "Please install Node.js manually on Windows."
-        fi
-        print_green "Node.js installation completed."
-    else
-        print_green "Node.js is already installed."
-    fi
-}
-check_node
-
-check_git() {
-    if ! command -v git &> /dev/null; then
-        print_red "Git not found, installing..."
-        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-            sudo apt update && sudo apt install -y git
-        elif [[ "$OSTYPE" == "darwin"* ]]; then
-            brew install git
-        elif [[ "$OSTYPE" == "cygwin" || "$OSTYPE" == "msys" ]]; then
-            echo "Please install Git manually on Windows."
-        fi
-        print_green "Git installation completed."
-    else
-        print_green "Git is already installed."
-    fi
-}
-check_git
-
-create_default_configs() {
-    cat > configs.json << EOL
-{
-  "limit": 100,
-  "countdown": 300,
-  "howManyPowerUpgrade": 5,
-  "howManyEnergyUpgrade": 5,
-  "howManyRechargeUPgrade": 5,
-  "isSkipInvalidProxy": false,
-  "delayEachAccount": [1, 1],
-  "doTasks": true,
-  "referralCode": "ref_NzQ3ODYwMzE3Ng"
-}
-EOL
-}
-
-check_configs() {
-        if ! node -e "try { const cfg = require('./configs.json'); if (!cfg.howManyAccountsRunInOneTime || typeof cfg.howManyAccountsRunInOneTime !== 'number' || cfg.howManyAccountsRunInOneTime < 1) throw new Error(); } catch { process.exit(1); }"; then
-        print_red "Invalid configuration detected. Resetting to default values..."
-        create_default_configs
-        print_green "Configuration reset completed."
-    fi
-}
-
-print_yellow "Checking configuration files..."
-if [ ! -f configs.json ]; then
-    create_default_configs
-    print_green "Created configs.json with default values"
-fi
-
-check_configs
-
-for file in datas.txt proxies.txt; do
-    if [ ! -f "$file" ]; then
-        touch "$file"
-        print_green "Created $file"
-    fi
-done
-
-print_green "Configuration files have been checked."
-
-print_yellow "Checking dependencies..."
-cd "$MODULES_DIR"
-npm install --no-audit --no-fund --prefer-offline --force user-agents axios colors https-proxy-agent socks-proxy-agent 
-cd - > /dev/null
-print_green "Dependencies installation completed!"
-
-print_green "Starting the bot..."
+echo Starting the bot...
 node meomundep
+
+pause
+exit
